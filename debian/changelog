@@ -1,3 +1,9 @@
+luajit (2.0.5+dfsg.2-1ppa1) xenial; urgency=medium
+
+  * New upstream release
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Thu, 06 Jul 2017 01:42:21 +0900
+
 luajit (2.0.4+dfsg-1) unstable; urgency=medium
 
   * New upstream release (Close: #789321)
