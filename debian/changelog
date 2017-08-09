@@ -1,3 +1,10 @@
+luajit (2.1~20170808+dfsg-1hnakamur1) xenial; urgency=medium
+
+  * Switch to use https://github.com/openresty/luajit2
+    v2.1-20170808 7897b76bc047a546afd5e7c591c0d3e91c6b5039
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Wed, 09 Aug 2017 14:16:34 +0900
+
 luajit (2.0.5+dfsg.2-1ppa1) xenial; urgency=medium
 
   * New upstream release
