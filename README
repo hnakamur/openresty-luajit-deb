@@ -31,7 +31,53 @@ since we still synchronize any upstream changes all the time.
 We introduce our own changes which will never merge or haven't yet merged into
 the upstream LuaJIT (https://github.com/LuaJIT/LuaJIT), which are
 
-feature: implemented the new Lua and C API functions for thread exdata.
+* feature: implemented the table.isempty() Lua API.
+
+    This Lua API can be JIT compiled.
+
+    Returns true when the table contains non-nil array elements or non-nil
+    key-value pairs.
+
+    Usage:
+
+    ```lua
+        local isempty = require "table.isempty"
+        print(isempty({}))  -- true
+        print(isempty({nil, dog = nil}))  -- true
+        print(isempty({"a", "b"}))  -- false
+        print(isempty({nil, 3}))  -- false
+        print(isempty({cat = 3}))  -- false
+    ```
+* feature: implemented the new table.isarray() builtin function which returns true
+  for purely array-like Lua tables and false otherwise.
+
+    Empty Lua tables are treated as arrays.
+
+    Use it like this:
+
+        isarr = require "table.isarray"
+        print(isarr{"a", true, 3.14})  -- true
+        print(isarr{"dog" = 3})  -- false
+        print(isarr{})  -- true
+
+* feature: implemented the new table.nkeys Lua API.
+
+    This Lua builtin returns the number of elements in a Lua table, i.e.,
+    the number of non-nil array elements plus the number of non-nil key-value
+    pairs in a single Lua table.
+
+    It can be used like this:
+
+      local nkeys = require "table.nkeys"
+
+      print(nkeys({}))  -- 0
+      print(nkeys({ "a", nil, "b" }))  -- 2
+      print(nkeys({ dog = 3, cat = 4, bird = nil }))  -- 2
+      print(nkeys({ "a", dog = 3, cat = 4 }))  -- 3
+
+    This Lua API can be JIT compiled.
+
+* feature: implemented the new Lua and C API functions for thread exdata.
 
     The Lua API can be used like below:
 
