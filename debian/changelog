@@ -1,3 +1,9 @@
+luajit (2.1.0~beta3.20190530+dfsg-1ubuntu1ppa1~bionic) bionic; urgency=medium
+
+  * New upstream version 2.1.0~beta3.20190530
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Wed, 26 Jun 2019 12:14:22 +0900
+
 luajit (2.1.0~beta3.20190329+dfsg-1ubuntu1ppa1~18.04.1) bionic; urgency=medium
 
   * New upstream version 2.1.0~beta3.20190329
