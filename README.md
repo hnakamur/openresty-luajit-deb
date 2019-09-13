@@ -39,8 +39,8 @@ We added the `table.isempty()` builtin Lua API.
 
 This Lua API can be JIT compiled.
 
-Returns true when the table contains non-nil array elements or non-nil
-key-value pairs.
+Returns true when the table contains neither non-nil array elements nor
+non-nil key-value pairs.
 
 Usage:
 
@@ -98,7 +98,9 @@ This Lua API can be JIT compiled.
 
 ### thread.exdata
 
-We implemented the new Lua and C API functions for thread exdata.
+We implemented the new Lua and C API functions for thread exdata to allow users
+to embed user data into a thread. This feature needs LuaJIT FFI and hence is
+not available when built with `-DLUAJIT_DISABLE_FFI`.
 
 The Lua API can be used like below:
 
@@ -228,6 +230,7 @@ LuaJIT.
 
 ## Miscellaneous
 
+* increased the maximum number of allowed upvalues from 60 to 120.
 * various important fixes for bugs in the JIT compiler and the VM which have not
 been merged in upstream LuaJIT.
 * removed the GCC 4 requirement for x86 for older systems like
