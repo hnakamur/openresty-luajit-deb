@@ -1,3 +1,10 @@
+luajit (2.1.0~beta3.20201027+dfsg-1ppa1~bionic) bionic; urgency=medium
+
+  * Add debian/gbp.conf to set debian-branch to ubuntu/bionic
+  * New upstream version 2.1.0_beta3.20201027
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Wed, 28 Oct 2020 14:53:27 +0900
+
 luajit (2.1.0~beta3.20200102+dfsg-1ppa1~bionic) bionic; urgency=medium
 
   * New upstream version 2.1.0_beta3.20200102
