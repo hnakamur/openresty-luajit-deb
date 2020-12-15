@@ -1,3 +1,9 @@
+luajit (2.1.0~beta3.20201027+dfsg-1ppa1~groovy) groovy; urgency=medium
+
+  * Change debian-branth to ubuntu/groovy
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Wed, 16 Dec 2020 06:05:24 +0900
+
 luajit (2.1.0~beta3.20201027+dfsg-1ppa1~bionic) bionic; urgency=medium
 
   * Add debian/gbp.conf to set debian-branch to ubuntu/bionic
