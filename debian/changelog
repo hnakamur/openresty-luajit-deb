@@ -1,3 +1,9 @@
+luajit (2.1.0~beta3.20220411+dfsg-1ppa1~bionic) bionic; urgency=medium
+
+  * New upstream version 2.1.0~beta3.20220411
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Mon, 18 Apr 2022 09:25:20 +0900
+
 luajit (2.1.0~beta3.20211210+dfsg-1ppa1~bionic) bionic; urgency=medium
 
   * New upstream version 2.1.0~beta3.20211210
