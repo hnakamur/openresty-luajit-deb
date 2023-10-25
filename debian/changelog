@@ -1,3 +1,10 @@
+luajit (2.1.20231006+dfsg-1ppa1~ubuntu22.04) jammy; urgency=medium
+
+  * New upstream version v2.1-20231006
+    https://github.com/openresty/luajit2/releases/tag/v2.1-20231006
+
+ -- Hiroaki Nakamura <hnakamur@gmail.com>  Wed, 25 Oct 2023 11:55:10 +0900
+
 luajit (2.1.0~beta3.20230410+dfsg-1ppa1~ubuntu22.04) jammy; urgency=medium
 
   * New upstream version 2.1.0_beta3.20230410
