@@ -1,6 +1,6 @@
 /*
 ** Target architecture selection.
-** Copyright (C) 2005-2022 Mike Pall. See Copyright Notice in luajit.h
+** Copyright (C) 2005-2023 Mike Pall. See Copyright Notice in luajit.h
 */
 
 #ifndef _LJ_ARCH_H
@@ -59,7 +59,7 @@
 #define LUAJIT_TARGET	LUAJIT_ARCH_X64
 #elif defined(__arm__) || defined(__arm) || defined(__ARM__) || defined(__ARM)
 #define LUAJIT_TARGET	LUAJIT_ARCH_ARM
-#elif defined(__aarch64__)
+#elif defined(__aarch64__) || defined(_M_ARM64)
 #define LUAJIT_TARGET	LUAJIT_ARCH_ARM64
 #elif defined(__s390x__) || defined(__s390x)
 #define LUAJIT_TARGET	LUAJIT_ARCH_S390X
@@ -70,7 +70,7 @@
 #elif defined(__mips__) || defined(__mips) || defined(__MIPS__) || defined(__MIPS)
 #define LUAJIT_TARGET	LUAJIT_ARCH_MIPS32
 #else
-#error "No support for this architecture (yet)"
+#error "Architecture not supported (in this version), see: https://luajit.org/status.html#architectures"
 #endif
 
 #endif
@@ -245,7 +245,7 @@
 #define LJ_TARGET_UNIFYROT	2	/* Want only IR_BROR. */
 #define LJ_ARCH_NUMMODE		LJ_NUMMODE_DUAL
 
-#if __ARM_ARCH == 8 || __ARM_ARCH_8__ || __ARM_ARCH_8A__
+#if __ARM_ARCH >= 8 || __ARM_ARCH_8__ || __ARM_ARCH_8A__
 #define LJ_ARCH_VERSION		80
 #elif __ARM_ARCH == 7 || __ARM_ARCH_7__ || __ARM_ARCH_7A__ || __ARM_ARCH_7R__ || __ARM_ARCH_7S__ || __ARM_ARCH_7VE__
 #define LJ_ARCH_VERSION		70
@@ -266,6 +266,9 @@
 #else
 #define LJ_ARCH_NAME		"arm64"
 #define LJ_ARCH_ENDIAN		LUAJIT_LE
+#endif
+#if !defined(LJ_ABI_PAUTH) && defined(__arm64e__)
+#define LJ_ABI_PAUTH		1
 #endif
 #define LJ_TARGET_ARM64		1
 #define LJ_TARGET_EHRETREG	0
@@ -301,7 +304,7 @@
 #define LJ_ARCH_NAME		"ppc"
 
 #if !defined(LJ_ARCH_HASFPU)
-#if defined(_SOFT_FLOAT) || defined(_SOFT_DOUBLE)
+#if defined(_SOFT_FLOAT) || defined(_SOFT_DOUBLE) || defined(__NO_FPRS__)
 #define LJ_ARCH_HASFPU		0
 #else
 #define LJ_ARCH_HASFPU		1
@@ -309,7 +312,7 @@
 #endif
 
 #if !defined(LJ_ABI_SOFTFP)
-#if defined(_SOFT_FLOAT) || defined(_SOFT_DOUBLE)
+#if defined(_SOFT_FLOAT) || defined(_SOFT_DOUBLE) || defined(__NO_FPRS__)
 #define LJ_ABI_SOFTFP		1
 #else
 #define LJ_ABI_SOFTFP		0
@@ -520,33 +523,45 @@
 #elif LJ_TARGET_ARM
 #if defined(__ARMEB__)
 #error "No support for big-endian ARM"
+#undef LJ_TARGET_ARM
 #endif
 #if __ARM_ARCH_6M__ || __ARM_ARCH_7M__ || __ARM_ARCH_7EM__
 #error "No support for Cortex-M CPUs"
+#undef LJ_TARGET_ARM
 #endif
 #if !(__ARM_EABI__ || LJ_TARGET_IOS)
 #error "Only ARM EABI or iOS 3.0+ ABI is supported"
+#undef LJ_TARGET_ARM
 #endif
 #elif LJ_TARGET_ARM64
 #if defined(_ILP32)
 #error "No support for ILP32 model on ARM64"
+#undef LJ_TARGET_ARM64
 #endif
 #elif LJ_TARGET_PPC
+#if defined(_LITTLE_ENDIAN) && (!defined(_BYTE_ORDER) || (_BYTE_ORDER == _LITTLE_ENDIAN))
+#error "No support for little-endian PPC32"
+#undef LJ_TARGET_PPC
+#endif
 #if defined(__NO_FPRS__) && !defined(_SOFT_FLOAT)
-#error "No support for PPC/e500 anymore (use LuaJIT 2.0)"
+#error "No support for PPC/e500, use LuaJIT 2.0"
+#undef LJ_TARGET_PPC
 #endif
 #elif LJ_TARGET_MIPS32
 #if !((defined(_MIPS_SIM_ABI32) && _MIPS_SIM == _MIPS_SIM_ABI32) || (defined(_ABIO32) && _MIPS_SIM == _ABIO32))
 #error "Only o32 ABI supported for MIPS32"
+#undef LJ_TARGET_MIPS
 #endif
 #if LJ_TARGET_MIPSR6
 /* Not that useful, since most available r6 CPUs are 64 bit. */
 #error "No support for MIPS32R6"
+#undef LJ_TARGET_MIPS
 #endif
 #elif LJ_TARGET_MIPS64
 #if !((defined(_MIPS_SIM_ABI64) && _MIPS_SIM == _MIPS_SIM_ABI64) || (defined(_ABI64) && _MIPS_SIM == _ABI64))
 /* MIPS32ON64 aka n32 ABI support might be desirable, but difficult. */
 #error "Only n64 ABI supported for MIPS64"
+#undef LJ_TARGET_MIPS
 #endif
 #endif
 #endif
@@ -632,6 +647,10 @@
 #endif
 #define LJ_SOFTFP		(!LJ_ARCH_HASFPU)
 #define LJ_SOFTFP32		(LJ_SOFTFP && LJ_32)
+
+#ifndef LJ_ABI_PAUTH
+#define LJ_ABI_PAUTH		0
+#endif
 
 #if LJ_ARCH_ENDIAN == LUAJIT_BE
 #define LJ_LE			0
